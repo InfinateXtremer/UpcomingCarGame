@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Cars/Infernus-NewScripts/Wheels.gd" type="Script" id=1]
+[ext_resource path="res://Cars/Infernus-NewScripts/FBX/wheel.glb" type="PackedScene" id=2]
+
+[node name="RayCast" type="RayCast"]
+enabled = true
+cast_to = Vector3( 0, -0.9, 0 )
+script = ExtResource( 1 )
+
+[node name="wheel" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.373692, 0 )

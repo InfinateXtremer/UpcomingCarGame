@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Cars/Infernus/FBX/infernus.fbx" type="PackedScene" id=1]
+[ext_resource path="res://Cars/Infernus/infernus_wheel.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Cars/Infernus-NewScripts/CarController.gd" type="Script" id=5]
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 2.60321, 0.625314, 1.07515 )
+
+[node name="Vehicle" type="RigidBody"]
+transform = Transform( 1.31134e-07, -3.12649e-14, -1, 2.38419e-07, 1, 0, 1, -2.38419e-07, 1.31134e-07, 0, 0, 0 )
+mass = 0.1
+can_sleep = false
+script = ExtResource( 5 )
+
+[node name="wheel_front_left" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6987, -0.370619, -3.28033 )
+enabled = true
+
+[node name="wheel_front_right" parent="." instance=ExtResource( 3 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6987, -0.370619, 2.67636 )
+enabled = true
+
+[node name="vehicle_collision" type="CollisionShape" parent="."]
+transform = Transform( 0.999707, -0.0242054, -3.84262e-11, 0.0242054, 0.999707, 3.17414e-09, -3.84262e-11, -3.17414e-09, 1, -0.0474446, 0.829404, 0.030117 )
+shape = SubResource( 2 )
+
+[node name="infernus" parent="." instance=ExtResource( 1 )]
+transform = Transform( -4.37113e-08, 2.38419e-07, -1, 2.38419e-07, 1, 2.38419e-07, 1, -2.38419e-07, -4.37114e-08, -1.44289e-07, -0.605189, 3.4853e-20 )

@@ -1,0 +1,79 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Cars/Cybertruck/vehicle_cybertruck.fbx" type="PackedScene" id=1]
+[ext_resource path="res://Cars/Infernus-NewScripts/CameraManager.gd" type="Script" id=2]
+[ext_resource path="res://Cars/Cybertruck/Wheel.tscn" type="PackedScene" id=3]
+[ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://Cars/Infernus-NewScripts/CarController.gd" type="Script" id=5]
+
+[sub_resource type="CapsuleShape" id=1]
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 2.78038, 0.733184, 0.895809 )
+
+[sub_resource type="SpatialMaterial" id=3]
+albedo_texture = ExtResource( 4 )
+uv1_scale = Vector3( 500, 500, 150 )
+
+[sub_resource type="BoxShape" id=4]
+extents = Vector3( 7.44829, 1, 8.89918 )
+
+[node name="Spatial" type="Spatial"]
+
+[node name="Vehicle" type="RigidBody" parent="."]
+transform = Transform( 1, -2.38419e-07, 0, 2.38419e-07, 1, 0, 0, 0, 1, -5.38723, 4.76698, -0.998419 )
+mass = 700.0
+can_sleep = false
+script = ExtResource( 5 )
+scr_wheel_paths = [ NodePath("RLeft3"), NodePath("RLeft4") ]
+
+[node name="cam_origin" type="Spatial" parent="Vehicle"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.43051e-06, -0.886001, 0 )
+script = ExtResource( 2 )
+
+[node name="camera_arm" type="SpringArm" parent="Vehicle/cam_origin"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.958079, 0 )
+collision_mask = 2
+shape = SubResource( 1 )
+spring_length = 5.0
+
+[node name="third_person" type="Camera" parent="Vehicle/cam_origin/camera_arm"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0339158, 0, 5 )
+fov = 90.0
+
+[node name="vehicle_cybertruck" parent="Vehicle" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.53674e-07, -0.956881, 0 )
+
+[node name="Wheel_Rear_Left" parent="Vehicle" instance=ExtResource( 3 )]
+transform = Transform( 0.57278, 0, 0, 0, 0.57278, 0, 0, 0, 0.57278, 1.966, -0.61088, 0.762 )
+wheel_rl = true
+
+[node name="Wheel_Rear_Right" parent="Vehicle" instance=ExtResource( 3 )]
+transform = Transform( 0.57278, 0, 0, 0, 0.57278, 0, 0, 0, 0.57278, 1.966, -0.61088, -0.762 )
+wheel_rr = true
+
+[node name="Wheel_Front_Left" parent="Vehicle" instance=ExtResource( 3 )]
+transform = Transform( 0.57278, 0, 0, 0, 0.57278, 0, 0, 0, 0.57278, -1.966, -0.61088, 0.762 )
+wheel_fl = true
+
+[node name="Wheel_Front_Right" parent="Vehicle" instance=ExtResource( 3 )]
+transform = Transform( 0.57278, 0, 0, 0, 0.57278, 0, 0, 0, 0.57278, -1.96629, -0.610935, -0.76213 )
+wheel_fr = true
+
+[node name="vehicle_collision" type="CollisionShape" parent="Vehicle"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.285449, 0.575472, 0 )
+shape = SubResource( 2 )
+
+[node name="rear_axle" type="Spatial" parent="Vehicle"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, -0.956881, 0 )
+
+[node name="CSGBox" type="CSGBox" parent="."]
+transform = Transform( 64.1496, 0, 0, 0, 1, 0, 0, 0, 64.1496, -5.98204, -1.1358, 0 )
+material_override = SubResource( 3 )
+width = 14.6488
+depth = 19.075
+
+[node name="StaticBody" type="StaticBody" parent="CSGBox"]
+
+[node name="CollisionShape" type="CollisionShape" parent="CSGBox/StaticBody"]
+shape = SubResource( 4 )

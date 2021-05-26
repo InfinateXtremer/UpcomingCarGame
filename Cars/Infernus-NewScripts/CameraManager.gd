@@ -1,7 +1,6 @@
 extends Spatial
 
 onready var spring_arm = get_node("camera_arm")
-export(Shape) var vehicle_shape
 
 
 #Camera Variables

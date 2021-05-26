@@ -60,8 +60,8 @@ func _process(delta):
 	camera_reset_time -= delta
 	if (camera_reset_time <= 0):
 		camera_reset_time = default_camera_reset_time
-		rotation = default_camera_rotation
-	#print(camera_reset_time)
+		rotation = Vector3(0, camera_target.rotation.y, 0)
+	print(camera_reset_time)
 	pass
 
 func _physics_process(delta):

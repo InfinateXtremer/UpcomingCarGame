@@ -8,11 +8,9 @@ var friction_slip: float
 var max_velocity:float
 var breaking_power:float
 var engine_force:float
-
-
 var thrust:float
 var steering:float
-
+var drifting_angle:float
 
 var car_body:RigidBody
 
@@ -25,6 +23,7 @@ func _ready():
 	max_velocity = car_body.max_velocity
 	breaking_power = car_body.breaking_power
 	engine_force = car_body.engine_force
+	drifting_angle = car_body.drifting_angle
 	pass # Replace with function body.
 
 func _physics_process(delta):
@@ -45,7 +44,7 @@ func _physics_process(delta):
 		#project wheel's forward vector to ground so it doesn't go in the air while driving fast
 		var normalized_wheel_forward = (global_transform.basis.z - global_transform.basis.z.project(get_collision_normal())).normalized()
 		
-		#make it float
+		#make the car float
 		car_body.add_force(global_transform.basis.y * (compression * suspension - damp) , hit - car_body.global_transform.origin)
 		
 		var slip_velocity:float = velocity_at_touch.dot(global_transform.basis.x)  #we get car x (left,right) velocity
@@ -54,18 +53,14 @@ func _physics_process(delta):
 		#Check if car's speed is around 0.5 than stop the car
 		if car_body.linear_velocity.length() <= 0.5: 
 			car_body.add_force(-car_body.linear_velocity.normalized(), Vector3(0,0,0)) #apply negative force so the car stops and doesn't go on it's own
-		
-		#print(_engine_force)
-		#totally unique math and totally not taken from a big triple a game that have cars
-		if car_body.linear_velocity.length() <= max_velocity / 4:
-			_engine_force *= 1
-			_breaking_power *= 1 #increase breaking power as we become slower to have smoother stop
-		elif car_body.linear_velocity.length() < max_velocity /2:
-			_engine_force *= 1
-			_breaking_power = breaking_power
-		
+			
 		if power_wheel: # wheels that drive the car forward, quarter force if they're not power wheels
-			car_body.add_force(normalized_wheel_forward * _engine_force * thrust, hit - car_body.global_transform.origin) # replace it with Vector3(0,0,0)
+			car_body.add_force(normalized_wheel_forward * _engine_force * thrust, hit - car_body.global_transform.origin)
 		
-		if car_body.breaking and not car_body.linear_velocity.length() <= 0.5:
-			car_body.add_force(-car_body.linear_velocity * _breaking_power, hit - car_body.global_transform.origin)
+		if car_body.breaking:
+			car_body.add_force(-car_body.linear_velocity.normalized() * _breaking_power, hit - car_body.global_transform.origin)
+			
+		if car_body.linear_velocity.dot(car_body.global_transform.basis.x) >= drifting_angle or car_body.linear_velocity.dot(car_body.global_transform.basis.x) <= -drifting_angle:
+			friction_slip = 2
+		else:
+			friction_slip = car_body.friction_slip

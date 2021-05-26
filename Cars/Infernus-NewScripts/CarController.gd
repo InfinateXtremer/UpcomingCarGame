@@ -6,12 +6,13 @@ var Wheels = []
 
 export var max_steering:float = 30
 
-export var suspension: float = 1000
+export var suspension: float = 500
 export var dampening_strength: float = 50
 export var friction_slip: float = 10
 export var max_velocity:float = 60
 export var breaking_power:float = 2
-export var engine_force:float = 10
+export var engine_force:float = 80
+export var drifting_angle:float = 7
 
 var _max_steering:float
 
@@ -51,23 +52,13 @@ func _process(delta):
 
 func _physics_process(delta):	
 	
-	
-	#totally unique math and totally not taken from a big triple a game that have cars
 	if linear_velocity.length() <= max_velocity / 4:
 		_max_steering = max_steering * 1.2
 	elif linear_velocity.length() < max_velocity /2:
-		_max_steering = max_steering / 2.5
+		_max_steering = max_steering
 
 	for wheel in Wheels:
 		if wheel.turning_wheel:
 			#Problem max_steering multiplied with steering_input makes them 0, multipliying it again with wheel.transform.basis.y makes it everything become 0
-			wheel.transform.basis = Basis(Quat(wheel.transform.basis.y, deg2rad(90) + (deg2rad(_max_steering) * steering_input)))
+			wheel.transform.basis = Basis(Quat(wheel.transform.basis.y, (deg2rad(_max_steering) * steering_input)))
 			pass
-			
-			
-			
-			
-			
-			
-			
-			
